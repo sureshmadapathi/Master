@@ -32,8 +32,7 @@ jobs:
             --konnect-control-plane-name demo-control-plane \
             --state kong-konnect-deck/services \
             --state kong-konnect-deck/routes \
-            --state kong-konnect-deck/plugins \
-            --state kong-konnect-deck/partials
+            --state kong-konnect-deck/plugins
 
       - name: Diff (Preview Changes)
         run: |
@@ -42,8 +41,7 @@ jobs:
             --konnect-control-plane-name demo-control-plane \
             --state kong-konnect-deck/services \
             --state kong-konnect-deck/routes \
-            --state kong-konnect-deck/plugins \
-            --state kong-konnect-deck/partials
+            --state kong-konnect-deck/plugins
 
       - name: Sync to Konnect
         run: |
@@ -52,5 +50,4 @@ jobs:
             --konnect-control-plane-name demo-control-plane \
             --state kong-konnect-deck/services \
             --state kong-konnect-deck/routes \
-            --state kong-konnect-deck/plugins \
-            --state kong-konnect-deck/partials
+            --state kong-konnect-deck/plugins
