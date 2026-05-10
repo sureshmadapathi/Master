@@ -20,12 +20,27 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
-        run: terraform init
+        run: terraform init -upgrade
 
       - name: Terraform Plan
-        run: terraform plan -var="env=${{ github.event.inputs.environment }}"
+        env:
+          TF_VAR_konnect_token: ${{ secrets.KONNECT_TOKEN }}
+          TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          terraform plan \
+            -var-file="terraform.tfvars" \
+            -var="env=${{ github.event.inputs.environment }}"
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve -var="env=${{ github.event.inputs.environment }}"
+        env:
+          TF_VAR_konnect_token: ${{ secrets.KONNECT_TOKEN }}
+          TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          terraform apply -auto-approve \
+            -var-file="terraform.tfvars" \
+            -var="env=${{ github.event.inputs.environment }}"
+
       - name: Terraform State List
         run: terraform state list

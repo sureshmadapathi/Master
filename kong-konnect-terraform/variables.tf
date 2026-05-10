@@ -7,7 +7,8 @@ variable "control_plane_id" {
 }
 
 variable "aws_region" {
-  type = string
+  type    = string
+  default = "ap-south-1"   # your AWS region
 }
 
 variable "aws_access_key" {
