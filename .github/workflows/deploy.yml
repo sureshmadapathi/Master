@@ -63,7 +63,7 @@ jobs:
               "name": "aws-valkey-redis",
               "type": "redis-ee",
               "config": {
-                "host": "suresh-valkey-uzpahi.serverless.aps1.cache.amazonaws.com",
+                "host": "host.docker.internal",
                 "port": 6379,
                 "ssl": true,
                 "ssl_verify": false,
