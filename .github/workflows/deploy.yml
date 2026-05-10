@@ -11,6 +11,9 @@ on:
 jobs:
   terraform:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: kong-konnect-terraform    # ← tells Terraform where .tf files are
 
     steps:
       - name: Checkout code
