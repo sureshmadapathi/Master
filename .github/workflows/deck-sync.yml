@@ -22,7 +22,7 @@ jobs:
       - name: Install decK
         uses: kong/setup-deck@v1
         with:
-          deck-version: v1.54.0
+          deck-version: v1.60.0
 
       - name: Validate Kong Config
         run: |
@@ -33,18 +33,18 @@ jobs:
 
       - name: Diff (Preview Changes)
         run: |
-          deck diff \
+          deck gateway diff \
             --konnect-token ${{ secrets.KONNECT_TOKEN }} \
             --konnect-control-plane-name demo-control-plane \
-            --state kong-konnect-deck/services \
-            --state kong-konnect-deck/routes \
-            --state kong-konnect-deck/plugins
+            kong-konnect-deck/services/flight-bookings-service.yaml \
+            kong-konnect-deck/routes/flights-route.yaml \
+            kong-konnect-deck/plugins/rate-limiting.yaml
 
       - name: Sync to Konnect
         run: |
-          deck sync \
+          deck gateway sync \
             --konnect-token ${{ secrets.KONNECT_TOKEN }} \
             --konnect-control-plane-name demo-control-plane \
-            --state kong-konnect-deck/services \
-            --state kong-konnect-deck/routes \
-            --state kong-konnect-deck/plugins
+            kong-konnect-deck/services/flight-bookings-service.yaml \
+            kong-konnect-deck/routes/flights-route.yaml \
+            kong-konnect-deck/plugins/rate-limiting.yaml
