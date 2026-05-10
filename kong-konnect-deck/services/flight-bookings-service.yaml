@@ -1,0 +1,11 @@
+_format_version: "3.0"
+_konnect:
+  control_plane_name: demo-control-plane
+
+services:
+  - name: flight-bookings-service
+    host: httpbin.konghq.com
+    port: 443
+    protocol: https
+    tags:
+      - flight-bookings

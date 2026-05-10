@@ -12,11 +12,13 @@ variable "aws_region" {
 }
 
 variable "aws_access_key" {
-  sensitive = true
+  description = "AWS Access Key ID for Secrets Manager"
+  sensitive   = true
 }
 
 variable "aws_secret_key" {
-  sensitive = true
+  description = "AWS Secret Access Key for Secrets Manager"
+  sensitive   = true
 }
 
 variable "env" {
@@ -31,4 +33,9 @@ variable "redis_host" {
 variable "redis_port" {
   type    = number
   default = 6379
+}
+
+variable "redis_partial_id" {
+  type        = string
+  description = "ID of the Redis partial created via Kong API"
 }

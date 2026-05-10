@@ -1,0 +1,15 @@
+_format_version: "3.0"
+_konnect:
+  control_plane_name: demo-control-plane
+
+routes:
+  - name: flights-route
+    service:
+      name: flight-bookings-service
+    paths:
+      - /flights
+    methods:
+      - GET
+    strip_path: true
+    tags:
+      - flight-bookings

@@ -1,11 +1,12 @@
-resource "konnect_gateway_vault" "aws_secrets" {
-  control_plane_id = var.control_plane_id
-  name             = "aws-secrets"
-  prefix           = "aws"
+# Vault already created in previous pipeline run
+# Commenting out to avoid duplicate creation error
 
-  config = {
-    region     = var.aws_region       # ap-south-1
-    access_key = var.aws_access_key
-    secret_key = var.aws_secret_key
-  }
-}
+# resource "konnect_gateway_vault" "aws_secrets" {
+#   control_plane_id = var.control_plane_id
+#   name             = "aws"
+#   prefix           = "aws-vault"
+#   description      = "AWS Secrets Manager Vault"
+#   config = jsonencode({
+#     region = var.aws_region
+#   })
+# }
