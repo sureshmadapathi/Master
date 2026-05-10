@@ -6,13 +6,10 @@ resource "konnect_gateway_plugin_rate_limiting" "flights_rate_limit" {
   }
 
   config = {
-    minute     = 5
-    policy     = "redis"
+    minute  = 5
+    policy  = "redis"
     redis = {
-      host       = var.redis_host
-      port       = var.redis_port
-      ssl        = true
-      ssl_verify = false
+      partial_id = var.redis_partial_id    # ← points to shared partial
     }
   }
 

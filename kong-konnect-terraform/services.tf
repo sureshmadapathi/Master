@@ -1,7 +1,10 @@
 resource "konnect_gateway_service" "flight_bookings" {
   control_plane_id = var.control_plane_id
   name             = "flight-bookings-service"
-  url              = "https://httpbin.konghq.com"
+  host             = "httpbin.konghq.com"
+  port             = 443
+  protocol         = "https"
+  path             = "/"
   tags             = ["flight-bookings"]
 }
 
