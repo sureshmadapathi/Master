@@ -27,3 +27,5 @@ jobs:
 
       - name: Terraform Apply
         run: terraform apply -auto-approve -var="env=${{ github.event.inputs.environment }}"
+      - name: Terraform State List
+        run: terraform state list
