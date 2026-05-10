@@ -1,3 +1,4 @@
+# plugins/rate-limiting.yaml
 _format_version: "3.0"
 _konnect:
   control_plane_name: demo-control-plane
@@ -13,4 +14,8 @@ plugins:
       minute: 5
       policy: redis
       redis:
-        partial_id: f4653460-5118-4c26-ab6e-335ed5109e9c
+        host: host.docker.internal   # change this one place when Redis changes
+        port: 6379
+        ssl: false
+        ssl_verify: false
+        database: 0
