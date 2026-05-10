@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: kong-konnect-terraform    # ← tells Terraform where .tf files are
+        working-directory: kong-konnect-terraform
 
     steps:
       - name: Checkout code
@@ -41,8 +41,7 @@ jobs:
 
       - name: Show Plan Details
         run: terraform show tfplan
-      - name: Check Provider Schema
-        run: terraform providers schema -json | jq '.provider_schemas."registry.terraform.io/kong/konnect".resource_schemas.konnect_gateway_partial.block.attributes'
+
       - name: Terraform Apply
         env:
           TF_VAR_konnect_token: ${{ secrets.KONNECT_TOKEN }}
@@ -52,6 +51,31 @@ jobs:
           terraform apply -auto-approve \
             -var-file="terraform.tfvars" \
             -var="env=${{ github.event.inputs.environment }}"
+
+      # ✅ ADD THIS STEP HERE — after Terraform Apply
+      - name: Create Redis Partial via Kong API
+        run: |
+          curl -s -X POST \
+            "https://us.api.konghq.com/v2/control-planes/2eeeda55-8386-4508-8873-2f74161fff44/core-entities/partials" \
+            -H "Authorization: Bearer ${{ secrets.KONNECT_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "name": "aws-valkey-redis",
+              "type": "redis-ee",
+              "config": {
+                "host": "suresh-valkey-uzpahi.serverless.aps1.cache.amazonaws.com",
+                "port": 6379,
+                "ssl": true,
+                "ssl_verify": false,
+                "database": 0,
+                "connect_timeout": 2000,
+                "read_timeout": 2000,
+                "send_timeout": 2000,
+                "keepalive_pool_size": 256,
+                "keepalive_backlog": 0,
+                "connection_is_proxied": false
+              }
+            }'
 
       - name: Terraform State List
         run: terraform state list
