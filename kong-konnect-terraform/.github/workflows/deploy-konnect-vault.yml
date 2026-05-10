@@ -1,0 +1,37 @@
+name: Deploy Konnect Vault
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to deploy (dev/staging/prod)"
+        required: true
+        default: "dev"
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        env:
+          KONNECT_TOKEN: ${{ secrets.KONNECT_TOKEN }}
+          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+        run: terraform plan -var="env=${{ github.event.inputs.environment }}"
+
+      - name: Terraform Apply
+        env:
+          KONNECT_TOKEN: ${{ secrets.KONNECT_TOKEN }}
+          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+        run: terraform apply -auto-approve -var="env=${{ github.event.inputs.environment }}"
