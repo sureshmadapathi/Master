@@ -23,15 +23,7 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
-        env:
-          KONNECT_TOKEN: ${{ secrets.KONNECT_TOKEN }}
-          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
         run: terraform plan -var="env=${{ github.event.inputs.environment }}"
 
       - name: Terraform Apply
-        env:
-          KONNECT_TOKEN: ${{ secrets.KONNECT_TOKEN }}
-          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
         run: terraform apply -auto-approve -var="env=${{ github.event.inputs.environment }}"
