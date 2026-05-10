@@ -19,5 +19,5 @@ plugins:
         host: host.docker.internal
         port: 6379
         ssl: true
-        ssl_verify: false
+        ssl_verify: true
         database: 0
