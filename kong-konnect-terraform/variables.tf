@@ -22,3 +22,12 @@ variable "env" {
   type    = string
   default = "dev"
 }
+
+variable "redis_host" {
+  type = string
+}
+
+variable "redis_port" {
+  type    = number
+  default = 6379
+}
