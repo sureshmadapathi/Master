@@ -26,12 +26,10 @@ jobs:
 
       - name: Validate Kong Config
         run: |
-          deck validate \
-            --konnect-token ${{ secrets.KONNECT_TOKEN }} \
-            --konnect-control-plane-name demo-control-plane \
-            --state kong-konnect-deck/services \
-            --state kong-konnect-deck/routes \
-            --state kong-konnect-deck/plugins
+          deck file validate \
+            kong-konnect-deck/services/flight-bookings-service.yaml \
+            kong-konnect-deck/routes/flights-route.yaml \
+            kong-konnect-deck/plugins/rate-limiting.yaml
 
       - name: Diff (Preview Changes)
         run: |

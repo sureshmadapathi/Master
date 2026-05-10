@@ -5,8 +5,7 @@ _konnect:
 plugins:
   - name: rate-limiting
     enabled: true
-    route:
-      name: flights-route
+    route: flights-route
     tags:
       - flight-bookings
       - rate-limiting
