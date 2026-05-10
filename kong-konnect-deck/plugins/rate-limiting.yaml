@@ -1,4 +1,3 @@
-# plugins/rate-limiting.yaml
 _format_version: "3.0"
 _konnect:
   control_plane_name: demo-control-plane
@@ -13,8 +12,11 @@ plugins:
     config:
       minute: 5
       policy: redis
+      limit_by: ip                  # ← changed from consumer to ip
+      fault_tolerant: false         # ← set false so we see Redis errors if any
+      hide_client_headers: false
       redis:
-        host: host.docker.internal   # change this one place when Redis changes
+        host: host.docker.internal
         port: 6379
         ssl: false
         ssl_verify: false
