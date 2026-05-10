@@ -18,6 +18,6 @@ plugins:
       redis:
         host: host.docker.internal
         port: 6379
-        ssl: false
+        ssl: true
         ssl_verify: false
         database: 0
