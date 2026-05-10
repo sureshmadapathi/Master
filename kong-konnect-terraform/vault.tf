@@ -3,9 +3,9 @@ resource "konnect_gateway_vault" "aws_secrets" {
   name             = "aws-secrets"
   prefix           = "aws"
 
-  config = {
-    region     = var.aws_region       # ap-south-1
+  config = jsonencode({
+    region     = var.aws_region
     access_key = var.aws_access_key
     secret_key = var.aws_secret_key
-  }
+  })
 }

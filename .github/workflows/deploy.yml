@@ -41,7 +41,8 @@ jobs:
 
       - name: Show Plan Details
         run: terraform show tfplan
-
+      - name: Check Provider Schema
+        run: terraform providers schema -json | jq '.provider_schemas."registry.terraform.io/kong/konnect".resource_schemas.konnect_gateway_partial.block.attributes'
       - name: Terraform Apply
         env:
           TF_VAR_konnect_token: ${{ secrets.KONNECT_TOKEN }}
