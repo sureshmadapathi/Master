@@ -54,3 +54,10 @@ jobs:
 
       - name: Terraform Show Full State
         run: terraform show
+
+      - name: Verify via Kong API
+        run: |
+          curl -s -X GET \
+            "https://us.api.konghq.com/v2/control-planes/2eeeda55-8386-4508-8873-2f74161fff44/core-entities/partials" \
+            -H "Authorization: Bearer ${{ secrets.KONNECT_TOKEN }}" \
+            -H "Content-Type: application/json" | jq .
