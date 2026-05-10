@@ -34,3 +34,8 @@ variable "redis_port" {
   type    = number
   default = 6379
 }
+
+variable "redis_partial_id" {
+  type        = string
+  description = "ID of the Redis partial created via Kong API"
+}
