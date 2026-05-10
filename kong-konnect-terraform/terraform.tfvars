@@ -4,3 +4,6 @@ aws_region = "us-east-1"
 konnect_token = "kpat_wjf9gHSH83EhKIb28n1DvDZbAIElwiBgo7rO5asUcGCAlGxZq"
 aws_access_key = "7148128p721hwhxhbasb"
 aws_secret_key = "sahdbdjlsbdjsuqwqr"
+
+redis_host     = "suresh-valkey-uzpahi.serverless.aps1.cache.amazonaws.com"
+redis_port     = 6379
