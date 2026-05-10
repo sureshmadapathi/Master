@@ -1,0 +1,19 @@
+_format_version: "3.0"
+_konnect:
+  control_plane_name: demo-control-plane
+
+partials:
+  - name: aws-valkey-redis
+    type: redis-ee
+    config:
+      host: host.docker.internal
+      port: 6379
+      ssl: false
+      ssl_verify: false
+      database: 0
+      connect_timeout: 2000
+      read_timeout: 2000
+      send_timeout: 2000
+      keepalive_pool_size: 256
+      keepalive_backlog: 0
+      connection_is_proxied: false

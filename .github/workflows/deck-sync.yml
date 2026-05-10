@@ -1,0 +1,56 @@
+name: Kong decK Sync
+
+on:
+  push:
+    paths:
+      - 'kong-konnect-deck/**'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to deploy (dev/staging/prod)"
+        required: true
+        default: "dev"
+
+jobs:
+  deck-sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install decK
+        run: |
+          curl -sL https://github.com/Kong/deck/releases/latest/download/deck_linux_amd64.tar.gz | tar xz
+          sudo mv deck /usr/local/bin/deck
+          deck version
+
+      - name: Validate Kong Config
+        run: |
+          deck validate \
+            --konnect-token ${{ secrets.KONNECT_TOKEN }} \
+            --konnect-control-plane-name demo-control-plane \
+            --state kong-konnect-deck/services \
+            --state kong-konnect-deck/routes \
+            --state kong-konnect-deck/plugins \
+            --state kong-konnect-deck/partials
+
+      - name: Diff (Preview Changes)
+        run: |
+          deck diff \
+            --konnect-token ${{ secrets.KONNECT_TOKEN }} \
+            --konnect-control-plane-name demo-control-plane \
+            --state kong-konnect-deck/services \
+            --state kong-konnect-deck/routes \
+            --state kong-konnect-deck/plugins \
+            --state kong-konnect-deck/partials
+
+      - name: Sync to Konnect
+        run: |
+          deck sync \
+            --konnect-token ${{ secrets.KONNECT_TOKEN }} \
+            --konnect-control-plane-name demo-control-plane \
+            --state kong-konnect-deck/services \
+            --state kong-konnect-deck/routes \
+            --state kong-konnect-deck/plugins \
+            --state kong-konnect-deck/partials

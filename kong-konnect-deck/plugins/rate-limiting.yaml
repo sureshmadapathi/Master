@@ -1,0 +1,17 @@
+_format_version: "3.0"
+_konnect:
+  control_plane_name: demo-control-plane
+
+plugins:
+  - name: rate-limiting
+    enabled: true
+    route:
+      name: flights-route
+    tags:
+      - flight-bookings
+      - rate-limiting
+    config:
+      minute: 5
+      policy: redis
+      redis:
+        partial_id: f4653460-5118-4c26-ab6e-335ed5109e9c
