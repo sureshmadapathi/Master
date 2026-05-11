@@ -18,7 +18,8 @@ plugins:
       redis:
         host: host.docker.internal
         port: 6379
-        ssl: true               # ← enable TLS
-        ssl_verify: false       # ← skip cert verification (tunnel uses self-signed)
+        ssl: true
+        ssl_verify: true        # ← must be true when ssl is true
+        server_name: suresh-valkey-uzpahi.serverless.aps1.cache.amazonaws.com  # ← add SNI
         database: 0
         timeout: 2000
