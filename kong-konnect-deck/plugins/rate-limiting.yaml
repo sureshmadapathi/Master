@@ -3,21 +3,28 @@ _konnect:
   control_plane_name: demo-control-plane
 
 plugins:
-  - name: rate-limiting
+  - name: rate-limiting-advanced
     enabled: true
     route: flights-route
     tags:
       - flight-bookings
       - rate-limiting
     config:
-      minute: 5
-      policy: redis
-      limit_by: ip                  # ← changed from consumer to ip
-      fault_tolerant: false         # ← set false so we see Redis errors if any
-      hide_client_headers: false
+      limit:
+        - 5             # 5 requests per minute
+        - 100           # 100 requests per hour
+      window_size:
+        - 60            # 1 minute in seconds
+        - 3600          # 1 hour in seconds
+      window_type: sliding   # more accurate than fixed
+      limit_by: ip
+      sync_rate: 0.5         # sync counters every 0.5 seconds
+      strategy: redis
       redis:
         host: host.docker.internal
         port: 6379
         ssl: false
         ssl_verify: false
         database: 0
+      hide_client_headers: false
+      retry_after_jitter_max: 0
