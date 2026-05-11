@@ -13,12 +13,12 @@ plugins:
       minute: 5
       policy: redis
       limit_by: ip
-      fault_tolerant: true      # ← back to true so requests pass even if Redis fails
+      fault_tolerant: true
       hide_client_headers: false
       redis:
         host: host.docker.internal
         port: 6379
-        ssl: false
-        ssl_verify: false
+        ssl: true               # ← enable TLS
+        ssl_verify: false       # ← skip cert verification (tunnel uses self-signed)
         database: 0
         timeout: 2000
