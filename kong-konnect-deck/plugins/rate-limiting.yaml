@@ -16,7 +16,7 @@ plugins:
       fault_tolerant: false         # ← set false so we see Redis errors if any
       hide_client_headers: false
       redis:
-        host: host.docker.internal
+        host: suresh-valkey-uzpahi.serverless.aps1.cache.amazonaws.com
         port: 6379
         ssl: true
         ssl_verify: true
