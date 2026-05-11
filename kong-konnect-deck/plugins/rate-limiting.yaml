@@ -13,7 +13,7 @@ plugins:
       minute: 5
       policy: redis
       limit_by: ip
-      fault_tolerant: false
+      fault_tolerant: true      # ← back to true so requests pass even if Redis fails
       hide_client_headers: false
       redis:
         host: host.docker.internal
