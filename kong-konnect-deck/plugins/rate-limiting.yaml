@@ -12,11 +12,14 @@ plugins:
     config:
       limit:
         - 5
+        - 100
       window_size:
         - 60
+        - 3600
       limit_by: ip
       strategy: redis
-      sync_rate: -1
+      sync_rate: 0          # ← synchronous, every request syncs to Redis
+      namespace: flights-rate-limit
       redis:
         host: host.docker.internal
         port: 6379
