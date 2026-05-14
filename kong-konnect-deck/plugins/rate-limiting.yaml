@@ -10,7 +10,7 @@ plugins:
       - flight-bookings
       - rate-limiting
     partials:
-      - id: d79c4f39-ad2e-4e30-84db-bfe5e5e8407f
+      - name: aws-valkey-redis
     config:
       minute: 5
       policy: redis
