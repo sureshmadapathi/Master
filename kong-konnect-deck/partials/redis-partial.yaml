@@ -4,7 +4,7 @@ _konnect:
 
 partials:
   - name: aws-valkey-redis
-    type: redis-ce        # ← changed from redis-ee to redis-ce
+    type: redis-ce
     config:
       host: host.docker.internal
       port: 6379
