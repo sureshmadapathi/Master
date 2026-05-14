@@ -3,7 +3,7 @@ _konnect:
   control_plane_name: demo-control-plane
 
 plugins:
-  - name: rate-limiting
+  - name: rate-limiting-advanced
     enabled: true
     route: flights-route
     tags:
@@ -12,8 +12,11 @@ plugins:
     partials:
       - name: aws-valkey-redis
     config:
-      minute: 5
-      policy: redis
+      limit:
+        - 5
+      window_size:
+        - 60
       limit_by: ip
-      fault_tolerant: true
-      hide_client_headers: false
+      strategy: redis
+      sync_rate: 0
+      namespace: flights-rate-limit
