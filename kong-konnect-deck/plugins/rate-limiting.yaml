@@ -9,11 +9,11 @@ plugins:
     tags:
       - flight-bookings
       - rate-limiting
+    partials:
+      - id: d79c4f39-ad2e-4e30-84db-bfe5e5e8407f
     config:
       minute: 5
       policy: redis
       limit_by: ip
       fault_tolerant: true
       hide_client_headers: false
-      redis:
-        partial_id: d79c4f39-ad2e-4e30-84db-bfe5e5e8407f

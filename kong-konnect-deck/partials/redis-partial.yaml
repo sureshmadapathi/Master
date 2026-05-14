@@ -1,15 +1,19 @@
+_format_version: "3.0"
+_konnect:
+  control_plane_name: demo-control-plane
+
 # ============================================================
-# NOTE: This partial was already created via Kong API curl
-# in the Terraform pipeline. DO NOT sync this file via decK
-# as it will cause a conflict with the existing partial.
+# NOTE: Redis partial already created via Kong API curl step
+# in the Terraform pipeline (deploy.yml).
+# DO NOT sync this file via decK as it will conflict with
+# the existing partial.
 #
-# Partial ID: f4653460-5118-4c26-ab6e-335ed5109e9c
-# Created: May 10, 2026
+# Partial Name: aws-valkey-redis
+# Partial ID:   d79c4f39-ad2e-4e30-84db-bfe5e5e8407f
+# Type:         redis-ee
+# Created via:  Terraform pipeline curl step
 # ============================================================
 
-# _format_version: "3.0"
-# _konnect:
-#   control_plane_name: demo-control-plane
 # partials:
 #   - name: aws-valkey-redis
 #     type: redis-ee
