@@ -4,7 +4,7 @@ _konnect:
 
 partials:
   - name: aws-valkey-redis
-    type: redis-ee
+    type: redis-ce        # ← changed from redis-ee to redis-ce
     config:
       host: host.docker.internal
       port: 6379
@@ -14,6 +14,3 @@ partials:
       connect_timeout: 2000
       read_timeout: 2000
       send_timeout: 2000
-      keepalive_pool_size: 256
-      keepalive_backlog: 0
-      connection_is_proxied: false
