@@ -5,4 +5,3 @@ redis_port       = 6379
 env              = "dev"
 redis_partial_id = "f4653460-5118-4c26-ab6e-335ed5109e9c"
 redis_host = "host.docker.internal"
-redis_port = 6379
