@@ -16,9 +16,4 @@ plugins:
       fault_tolerant: true
       hide_client_headers: false
       redis:
-        host: host.docker.internal
-        port: 6379
-        ssl: false          # ← stunnel handles TLS
-        ssl_verify: false
-        database: 0
-        timeout: 2000
+        partial_id: d79c4f39-ad2e-4e30-84db-bfe5e5e8407f
