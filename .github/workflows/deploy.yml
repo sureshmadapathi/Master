@@ -41,7 +41,16 @@ jobs:
 
       - name: Show Plan Details
         run: terraform show tfplan
-
+      - name: Terraform Import Control Plane
+        env:
+          TF_VAR_konnect_token: ${{ secrets.KONNECT_TOKEN }}
+          TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          terraform import \
+            -var-file="terraform.tfvars" \
+            -var="env=${{ github.event.inputs.environment }}" \
+            konnect_gateway_control_plane.main fa238c45-5af4-4806-bb14-ce6b6bbdadf5 || true
       - name: Terraform Apply
         env:
           TF_VAR_konnect_token: ${{ secrets.KONNECT_TOKEN }}
