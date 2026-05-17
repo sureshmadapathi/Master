@@ -16,7 +16,8 @@ plugins:
         - 5
       window_size:
         - 60
-      limit_by: ip
+      window_type: sliding
+      identifier: ip
       strategy: redis
       sync_rate: 0
       namespace: flights-rate-limit
