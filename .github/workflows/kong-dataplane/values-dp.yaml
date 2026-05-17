@@ -1,0 +1,74 @@
+ingressController:
+  enabled: false
+
+enterprise:
+  enabled: true
+  license_secret: kong-enterprise-license
+
+image:
+  repository: kong/kong-gateway
+  tag: "3.14"
+
+secretVolumes:
+  - kong-cluster-cert
+
+env:
+  role: data_plane
+  database: "off"
+  konnect_mode: 'on'
+  vitals: "off"
+  nginx_worker_processes: "1"
+  cluster_mtls: pki
+
+  # These get overridden by pipeline from Terraform outputs
+  cluster_control_plane: "PLACEHOLDER"
+  cluster_telemetry_endpoint: "PLACEHOLDER"
+  cluster_telemetry_server_name: "PLACEHOLDER"
+  cluster_server_name: "PLACEHOLDER"
+
+  cluster_cert: /etc/secrets/kong-cluster-cert/tls.crt
+  cluster_cert_key: /etc/secrets/kong-cluster-cert/tls.key
+
+  lua_ssl_trusted_certificate: system
+  proxy_access_log: "off"
+  dns_stale_ttl: "3600"
+  status_listen: "0.0.0.0:8100"
+
+proxy:
+  enabled: true
+
+admin:
+  enabled: false
+
+manager:
+  enabled: false
+
+livenessProbe:
+  httpGet:
+    path: "/status"
+    port: status
+    scheme: HTTP
+  initialDelaySeconds: 120
+  timeoutSeconds: 5
+  periodSeconds: 10
+  successThreshold: 1
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: "/status/ready"
+    port: status
+    scheme: HTTP
+  initialDelaySeconds: 60
+  timeoutSeconds: 5
+  periodSeconds: 10
+  successThreshold: 1
+  failureThreshold: 3
+
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    cpu: 1
+    memory: 2Gi

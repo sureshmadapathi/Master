@@ -2,23 +2,17 @@ variable "konnect_token" {
   sensitive = true
 }
 
-variable "control_plane_id" {
-  type = string
-}
-
 variable "aws_region" {
   type    = string
-  default = "ap-south-1"   # your AWS region
+  default = "ap-south-1"
 }
 
 variable "aws_access_key" {
-  description = "AWS Access Key ID for Secrets Manager"
-  sensitive   = true
+  sensitive = true
 }
 
 variable "aws_secret_key" {
-  description = "AWS Secret Access Key for Secrets Manager"
-  sensitive   = true
+  sensitive = true
 }
 
 variable "env" {
@@ -35,7 +29,4 @@ variable "redis_port" {
   default = 6379
 }
 
-variable "redis_partial_id" {
-  type        = string
-  description = "ID of the Redis partial created via Kong API"
-}
+# Note: control_plane_id removed - now comes from output

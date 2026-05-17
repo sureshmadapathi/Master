@@ -52,40 +52,8 @@ jobs:
             -var-file="terraform.tfvars" \
             -var="env=${{ github.event.inputs.environment }}"
 
-      # ✅ ADD THIS STEP HERE — after Terraform Apply
-      - name: Create Redis Partial via Kong API
-        run: |
-          curl -s -X POST \
-            "https://us.api.konghq.com/v2/control-planes/2eeeda55-8386-4508-8873-2f74161fff44/core-entities/partials" \
-            -H "Authorization: Bearer ${{ secrets.KONNECT_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "name": "aws-valkey-redis",
-              "type": "redis-ee",
-              "config": {
-                "host": "host.docker.internal",
-                "port": 6379,
-                "ssl": true,
-                "ssl_verify": false,
-                "database": 0,
-                "connect_timeout": 2000,
-                "read_timeout": 2000,
-                "send_timeout": 2000,
-                "keepalive_pool_size": 256,
-                "keepalive_backlog": 0,
-                "connection_is_proxied": false
-              }
-            }'
-
       - name: Terraform State List
         run: terraform state list
 
       - name: Terraform Show Full State
         run: terraform show
-
-      - name: Verify via Kong API
-        run: |
-          curl -s -X GET \
-            "https://us.api.konghq.com/v2/control-planes/2eeeda55-8386-4508-8873-2f74161fff44/core-entities/partials" \
-            -H "Authorization: Bearer ${{ secrets.KONNECT_TOKEN }}" \
-            -H "Content-Type: application/json" | jq .
