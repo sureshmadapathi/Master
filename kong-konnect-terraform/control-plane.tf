@@ -1,3 +1,8 @@
+import {
+  to = konnect_gateway_control_plane.main
+  id = "fa238c45-5af4-4806-bb14-ce6b6bbdadf5"
+}
+
 resource "konnect_gateway_control_plane" "main" {
   name         = "demo-control-plane"
   description  = "Main control plane"
