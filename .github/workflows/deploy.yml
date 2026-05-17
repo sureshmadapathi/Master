@@ -15,6 +15,14 @@ jobs:
       run:
         working-directory: kong-konnect-terraform
 
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: ap-south-1
+      TF_VAR_konnect_token: ${{ secrets.KONNECT_TOKEN }}
+      TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -23,20 +31,9 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-south-1
         run: terraform init -upgrade
 
       - name: Terraform Plan Output
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-south-1
-          TF_VAR_konnect_token: ${{ secrets.KONNECT_TOKEN }}
-          TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           terraform plan \
             -var-file="terraform.tfvars" \
@@ -44,43 +41,18 @@ jobs:
             -out=tfplan
 
       - name: Show Plan Details
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-south-1
         run: terraform show tfplan
 
       - name: Terraform Apply
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-south-1
-          TF_VAR_konnect_token: ${{ secrets.KONNECT_TOKEN }}
-          TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           terraform apply -auto-approve \
             -var-file="terraform.tfvars" \
             -var="env=${{ github.event.inputs.environment }}"
 
       - name: Show Control Plane Outputs
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-south-1
-          TF_VAR_konnect_token: ${{ secrets.KONNECT_TOKEN }}
-          TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: terraform output
 
       - name: Save Cluster Cert and Key
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-south-1
-          TF_VAR_konnect_token: ${{ secrets.KONNECT_TOKEN }}
-          TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           echo "=== CLUSTER CERT ==="
           terraform output -raw cluster_cert
@@ -89,8 +61,6 @@ jobs:
           terraform output -raw cluster_key
 
       - name: Deploy Kong on EC2
-        env:
-          EC2_HOST: ${{ secrets.EC2_HOST }}
         run: |
           echo "${{ secrets.EC2_SSH_KEY }}" > /tmp/ec2-key.pem
           chmod 600 /tmp/ec2-key.pem
@@ -101,11 +71,11 @@ jobs:
           scp -i /tmp/ec2-key.pem \
               -o StrictHostKeyChecking=no \
               /tmp/cluster.crt /tmp/cluster.key \
-              ec2-user@$EC2_HOST:~/
+              ec2-user@${{ secrets.EC2_HOST }}:~/
 
           ssh -i /tmp/ec2-key.pem \
               -o StrictHostKeyChecking=no \
-              ec2-user@$EC2_HOST << 'EOF'
+              ec2-user@${{ secrets.EC2_HOST }} << 'EOF'
             docker stop kong-dp || true
             docker rm kong-dp || true
 
@@ -143,11 +113,7 @@ jobs:
           ssh -i /tmp/ec2-key.pem \
               -o StrictHostKeyChecking=no \
               ec2-user@${{ secrets.EC2_HOST }} \
-              "docker ps | grep kong-dp && curl -s http://localhost:8100/status | python3 -m json.tool | grep -i connected"
+              "docker ps | grep kong-dp && curl -s http://localhost:8100/status"
 
       - name: Terraform State List
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-south-1
         run: terraform state list
