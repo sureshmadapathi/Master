@@ -27,6 +27,7 @@ jobs:
       - name: Validate Kong Config
         run: |
           deck file validate \
+            kong-konnect-deck/partials/redis-partial.yaml \
             kong-konnect-deck/services/flight-bookings-service.yaml \
             kong-konnect-deck/routes/flights-route.yaml \
             kong-konnect-deck/plugins/rate-limiting.yaml
@@ -36,6 +37,7 @@ jobs:
           deck gateway diff \
             --konnect-token ${{ secrets.KONNECT_TOKEN }} \
             --konnect-control-plane-name demo-control-plane \
+            kong-konnect-deck/partials/redis-partial.yaml \
             kong-konnect-deck/services/flight-bookings-service.yaml \
             kong-konnect-deck/routes/flights-route.yaml \
             kong-konnect-deck/plugins/rate-limiting.yaml
@@ -45,6 +47,7 @@ jobs:
           deck gateway sync \
             --konnect-token ${{ secrets.KONNECT_TOKEN }} \
             --konnect-control-plane-name demo-control-plane \
+            kong-konnect-deck/partials/redis-partial.yaml \
             kong-konnect-deck/services/flight-bookings-service.yaml \
             kong-konnect-deck/routes/flights-route.yaml \
             kong-konnect-deck/plugins/rate-limiting.yaml

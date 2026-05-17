@@ -6,9 +6,9 @@ partials:
   - name: aws-valkey-redis
     type: redis-ee
     config:
-      host: host.docker.internal
+      host: suresh-valkey-uzpahi.serverless.aps1.cache.amazonaws.com
       port: 6379
-      ssl: false
+      ssl: true
       ssl_verify: false
       database: 0
       connect_timeout: 2000
