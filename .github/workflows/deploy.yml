@@ -57,3 +57,15 @@ jobs:
 
       - name: Terraform Show Full State
         run: terraform show
+
+      - name: Save Cluster Cert and Key
+        env:
+          TF_VAR_konnect_token: ${{ secrets.KONNECT_TOKEN }}
+          TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          echo "=== CLUSTER CERT ==="
+          terraform output -raw cluster_cert
+          echo ""
+          echo "=== CLUSTER KEY ==="
+          terraform output -raw cluster_key
