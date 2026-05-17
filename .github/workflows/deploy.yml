@@ -1,4 +1,4 @@
-name: Deploy Konnect Vault
+name: Deploy Konnect Control Plane
 
 on:
   workflow_dispatch:
@@ -26,10 +26,17 @@ jobs:
         run: rm -f .terraform.lock.hcl
 
       - name: Terraform Init
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-south-1
         run: terraform init -upgrade
 
       - name: Terraform Plan Output
         env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-south-1
           TF_VAR_konnect_token: ${{ secrets.KONNECT_TOKEN }}
           TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -40,19 +47,17 @@ jobs:
             -out=tfplan
 
       - name: Show Plan Details
-        run: terraform show tfplan
-      - name: Terraform Import Control Plane
         env:
-          TF_VAR_konnect_token: ${{ secrets.KONNECT_TOKEN }}
-          TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: |
-          terraform import \
-            -var-file="terraform.tfvars" \
-            -var="env=${{ github.event.inputs.environment }}" \
-            konnect_gateway_control_plane.main fa238c45-5af4-4806-bb14-ce6b6bbdadf5 || true
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-south-1
+        run: terraform show tfplan
+
       - name: Terraform Apply
         env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-south-1
           TF_VAR_konnect_token: ${{ secrets.KONNECT_TOKEN }}
           TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -61,14 +66,21 @@ jobs:
             -var-file="terraform.tfvars" \
             -var="env=${{ github.event.inputs.environment }}"
 
-      - name: Terraform State List
-        run: terraform state list
-
-      - name: Terraform Show Full State
-        run: terraform show
+      - name: Show Control Plane Outputs
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-south-1
+          TF_VAR_konnect_token: ${{ secrets.KONNECT_TOKEN }}
+          TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: terraform output
 
       - name: Save Cluster Cert and Key
         env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-south-1
           TF_VAR_konnect_token: ${{ secrets.KONNECT_TOKEN }}
           TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -78,3 +90,10 @@ jobs:
           echo ""
           echo "=== CLUSTER KEY ==="
           terraform output -raw cluster_key
+
+      - name: Terraform State List
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-south-1
+        run: terraform state list

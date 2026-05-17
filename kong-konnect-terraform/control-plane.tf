@@ -1,13 +1,13 @@
 import {
   to = konnect_gateway_control_plane.main
-  id = "fa238c45-5af4-4806-bb14-ce6b6bbdadf5"
+  id = "7dd63da8-40c4-46ad-9ace-9d89709c712b"
 }
 
 resource "konnect_gateway_control_plane" "main" {
   name         = "demo-control-plane"
   description  = "Main control plane"
   cluster_type = "CLUSTER_TYPE_HYBRID"
-  auth_type    = "pki_client_certs"    # ← changed from pki_client_auth to pki_client_certs
+  auth_type    = "pki_client_certs"
 
   proxy_urls = [
     {
